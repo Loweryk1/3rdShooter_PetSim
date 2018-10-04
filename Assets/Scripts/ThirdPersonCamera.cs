@@ -80,6 +80,6 @@ public class ThirdPersonCamera : MonoBehaviour {
         Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);                          //Creates a new Quaternion to store the new rotational position around the target.
         camTransform.position = lookAt.position + rotation * dir;                               //Set where the Camera is by grabbing where its target is, then adding its new rotation and direction variables.
         camTransform.LookAt(lookAt.position);                                                   //Set the Camera to look at the target.
-
+        //[TODO:] Pass rotation to the PlayerMovement to control its rotation?
     }
 }
