@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This script gives a Camera object the functions needed to be directly controlled by the player.
+/// It allows the player to rotate the Camera around a set target using the mouse.
+/// </summary>
 public class ThirdPersonCamera : MonoBehaviour {
     /// <summary>
     /// The minimum angle that the camera can exist in "Vertical" space.

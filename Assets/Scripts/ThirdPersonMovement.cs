@@ -5,6 +5,10 @@ using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]                             //To run this code, the object needs to have a CharacterController attached.
 [RequireComponent(typeof(Camera))]                                          //To run this code, the object needs to have a Camera attached.
+
+/// <summary>
+/// This script gives the the object its applied to the ability to be controlled by the player.
+/// </summary>
 public class ThirdPersonMovement : MonoBehaviour {
     /// <summary>
     /// Stores the pawn that the player moves as the Character.
