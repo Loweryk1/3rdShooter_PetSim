@@ -33,6 +33,7 @@ public class ThirdPersonMovement : MonoBehaviour {
 	void Update ()
     {
         MoveAround();                                                               //Calls upon the MoveAround() function. 
+        if(Input.GetButton("Fire1")) Shoot();
         
     }
 
@@ -61,5 +62,11 @@ public class ThirdPersonMovement : MonoBehaviour {
     private void AimPlayer()
     {
 
+    }
+
+    //Is called upon when the player needs to shoot.
+    private void Shoot()
+    {
+        print("Player is shooting");
     }
 }
