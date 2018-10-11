@@ -13,6 +13,9 @@ public class ThirdPersonMovement : MonoBehaviour {
     /// Stores the pawn that the player moves as the Character.
     /// </summary>
     CharacterController pawn;
+    /// <summary>
+    /// Stores the OrbitalCamera that is following the player.
+    /// </summary>
     public OrbitalCamera orbitCam;
 
     /// <summary>
@@ -42,7 +45,6 @@ public class ThirdPersonMovement : MonoBehaviour {
 	void Update ()
     {
         MoveAround();                                                               //Calls upon the MoveAround() function. 
-        if(Input.GetButton("Fire1")) Shoot();                                       //If the player presses the 'Fire1' button, call upon Shoot()
         
     }
 
@@ -74,11 +76,5 @@ public class ThirdPersonMovement : MonoBehaviour {
 
         moveDirection.y -= gravity * Time.deltaTime;                //Apply gravity.
         pawn.Move(moveDirection * Time.deltaTime);                  //Move the controller.
-    }
-
-    //Is called upon when the player needs to shoot.
-    private void Shoot()
-    {
-        print("Player is shooting");
     }
 }
