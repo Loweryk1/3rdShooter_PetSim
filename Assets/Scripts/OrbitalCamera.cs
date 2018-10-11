@@ -10,11 +10,11 @@ public class OrbitalCamera : MonoBehaviour {
     /// <summary>
     /// The minimum angle that the camera can exist in "Vertical" space.
     /// </summary>
-    private const float Y_ANGLE_MIN = 5f;
+    private const float Y_ANGLE_MIN = -80f;
     /// <summary>
     /// The maximum angle that the camera can exist in "Vertical" space.
     /// </summary>
-    private const float Y_ANGLE_MAX = -80f;
+    private const float Y_ANGLE_MAX = 80f;
 
     /// <summary>
     /// Stores the pitch of the camera.
@@ -57,7 +57,7 @@ public class OrbitalCamera : MonoBehaviour {
         float lookY = Input.GetAxis("Mouse Y") * (invertLookY ? -1 : 1) * lookSensitivityY;     //Store the vertical change of the camera.
 
         pitch += lookY;                                                                         //Add the vertical change of the camera to its pitch.
-        pitch = Mathf.Clamp(pitch, Y_ANGLE_MAX, Y_ANGLE_MIN);                                   //Clamp the pitch of the camera based on its min and max angles.
+        pitch = Mathf.Clamp(pitch, Y_ANGLE_MIN, Y_ANGLE_MAX);                                   //Clamp the pitch of the camera based on its min and max angles.
 
         yaw += lookX;                                                                           //Add the horizontal change of the camera to its yaw.
 

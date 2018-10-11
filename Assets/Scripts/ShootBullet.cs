@@ -11,7 +11,7 @@ public class ShootBullet : MonoBehaviour {
     /// <summary>
     /// Controls the maximum amount of time between bullet fire.
     /// </summary>
-    public float bulletSpawnTimerMax = 2.0f;
+    public float bulletSpawnTimerMax = 0.1f;
 
     /// <summary>
     /// Stores the prefab of the bullet that is fired.
@@ -27,6 +27,8 @@ public class ShootBullet : MonoBehaviour {
     /// </summary>
     public float coolDown = 0;
 
+    public float bulletDistance = 100.0f;
+
 	// Use this for initialization
 	void Start () { }
 	
@@ -36,8 +38,7 @@ public class ShootBullet : MonoBehaviour {
         {
             Fire();                                                 //Call the Fire() function
         }
-        if(coolDown > 0) coolDown-= Time.deltaTime;                            //If the coolDown timer greater than 0, it counts down deltaTime.
-        print("Cooldown time for bullets: " + coolDown);
+        coolDown-= Time.deltaTime;                            //If the coolDown timer greater than 0, it counts down deltaTime.
 	}
 
     /// <summary>
@@ -48,7 +49,21 @@ public class ShootBullet : MonoBehaviour {
         if (coolDown <= 0)
         {
             //Adjust the player so it is facing the same direction as the Orbital Camera.
-            GetComponent<OrientPlayer>().TurnAround();
+            OrientPlayer orient = GetComponent<OrientPlayer>();
+            orient.TurnAround();
+
+            Ray ray = new Ray(orient.orbitCam.position, orient.orbitCam.forward);
+            if (Physics.Raycast(ray, bulletDistance))
+            {
+                Debug.DrawRay(ray.origin, ray.direction * bulletDistance, Color.green, 5.0f);
+                Debug.Log("Did Hit");
+            }
+            else
+            {
+                Debug.DrawRay(ray.origin, ray.direction * bulletDistance, Color.white, 5.0f);
+                Debug.Log("Did Not Hit");
+            }
+            
 
             //Create the Bullet from the Bullet Prefab
             var bullet = (GameObject)Instantiate(
@@ -57,7 +72,9 @@ public class ShootBullet : MonoBehaviour {
                 bulletSpawn.rotation);
 
             //Add velocity to the bullet
-            bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 6;
+            //bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 6;
+
+
 
             //Detroy the bullet after 2 seconds
             Destroy(bullet, 2.0f);

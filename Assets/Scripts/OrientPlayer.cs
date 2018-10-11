@@ -10,7 +10,7 @@ public class OrientPlayer : MonoBehaviour {
     /// <summary>
     /// Stores the OrbitalCamera that is following the player.
     /// </summary>
-    public OrbitalCamera orbitCam;
+    public Transform orbitCam;
 
     void Start() { }
 
@@ -19,7 +19,7 @@ public class OrientPlayer : MonoBehaviour {
     /// </summary>
     public void TurnAround()
     {
-        float camYaw = orbitCam.transform.localEulerAngles.y;   //Stores the Yaw of the OrbitalCamera.
+        float camYaw = orbitCam.eulerAngles.y;   //Stores the Yaw of the OrbitalCamera.
         transform.eulerAngles = new Vector3(0, camYaw, 0);      //Adjusts the rotation of this object using Euler Angles.
     }
 }

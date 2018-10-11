@@ -61,7 +61,7 @@ public class ThirdPersonMovement : MonoBehaviour {
 
             if (h != 0 || v != 0) GetComponent<OrientPlayer>().TurnAround();
 
-            moveDirection = transform.TransformDirection(new Vector3(-h, 0.0f, -v)) * speed;         //Get the direction the player is going to move based on the direction it's facing, the "Horizontal" and "Vertical" Inputs, and it's speed.
+            moveDirection = transform.TransformDirection(new Vector3(h, 0.0f, v)) * speed;         //Get the direction the player is going to move based on the direction it's facing, the "Horizontal" and "Vertical" Inputs, and it's speed.
 
             if (Input.GetButton("Jump"))                                                            //if the "Jump" input is pressed, AND the player is jumping...            
             {
