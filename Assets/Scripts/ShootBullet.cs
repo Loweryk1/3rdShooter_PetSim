@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class ShootBullet : MonoBehaviour {
 
-    private const float BULLET_SPAWN_TIMER_MAX = 2.0f;
+    public float bulletSpawnTimerMax = 2.0f;
 
     /// <summary>
     /// Stores the prefab of the bullet that is fired.
@@ -19,10 +19,8 @@ public class ShootBullet : MonoBehaviour {
     public Transform bulletSpawn;
 
     /// <summary>
-    /// Stores the OrbitalCamera that is following the player.
+    /// Stores the current time until the next bullet can be fired.
     /// </summary>
-    public OrbitalCamera orbitCam;
-
     public float coolDown = 0;
 
 	// Use this for initialization
@@ -44,8 +42,7 @@ public class ShootBullet : MonoBehaviour {
         if (coolDown <= 0)
         {
             //Adjust the player so it is facing the same direction as the Orbital Camera.
-            float camYaw = orbitCam.transform.localEulerAngles.y;   //Stores the Yaw of the OrbitalCamera.
-            transform.eulerAngles = new Vector3(0, camYaw, 0);      //Adjusts the rotation of this object using Euler Angles.
+            GetComponent<OrientPlayer>().TurnAround();
 
             //Create the Bullet from the Bullet Prefab
             var bullet = (GameObject)Instantiate(
@@ -58,7 +55,7 @@ public class ShootBullet : MonoBehaviour {
 
             //Detroy the bullet after 2 seconds
             Destroy(bullet, 2.0f);
-            coolDown = BULLET_SPAWN_TIMER_MAX;
+            coolDown = bulletSpawnTimerMax;
         }
     }
 }

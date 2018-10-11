@@ -13,10 +13,6 @@ public class ThirdPersonMovement : MonoBehaviour {
     /// Stores the pawn that the player moves as the Character.
     /// </summary>
     CharacterController pawn;
-    /// <summary>
-    /// Stores the OrbitalCamera that is following the player.
-    /// </summary>
-    public OrbitalCamera orbitCam;
 
     /// <summary>
     /// The speed the player travels at, measured in meters.
@@ -60,11 +56,7 @@ public class ThirdPersonMovement : MonoBehaviour {
             float h = Input.GetAxis("Horizontal");                      //Stores the Horizontal Input of the keyboard to be referenced within MoveAround.
             float v = Input.GetAxis("Vertical");                        //Stores the Vertical Input of the keyboard to be referenced within MoveAround.
 
-            if (h != 0 || v != 0)
-            {
-                float camYaw = orbitCam.transform.localEulerAngles.y;   //Stores the Yaw of the OrbitalCamera.
-                transform.eulerAngles = new Vector3(0, camYaw, 0);      //Adjusts the rotation of this object using Euler Angles.
-            }
+            if (h != 0 || v != 0) GetComponent<OrientPlayer>().TurnAround();
 
             moveDirection = transform.TransformDirection(new Vector3(-h, 0.0f, -v)) * speed;         //Get the direction the player is going to move based on the direction it's facing, the "Horizontal" and "Vertical" Inputs, and it's speed.
 
