@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]                             //To run this code, the object needs to have a CharacterController attached.
-[RequireComponent(typeof(Camera))]                                          //To run this code, the object needs to have a Camera attached.
 
 /// <summary>
 /// This script gives the the object its applied to the ability to be controlled by the player.
@@ -14,10 +13,7 @@ public class ThirdPersonMovement : MonoBehaviour {
     /// Stores the pawn that the player moves as the Character.
     /// </summary>
     CharacterController pawn;
-    /// <summary>
-    /// Stores the camera the player will orient itself to.
-    /// </summary>
-    Camera cam;
+    public OrbitalCamera orbitCam;
 
     /// <summary>
     /// The speed the player travels at, measured in meters.
@@ -40,7 +36,6 @@ public class ThirdPersonMovement : MonoBehaviour {
     // Use this for initialization
     void Start () {
         pawn = GetComponent<CharacterController>();                                 //Stores the CharacterController of the object this script is applied to as "pawn".
-        cam = GetComponentInChildren<Camera>();                                     //Stores the Camera child of the object this script is applied to as "cam".
     }
 	
 	// Update is called once per frame
@@ -51,12 +46,6 @@ public class ThirdPersonMovement : MonoBehaviour {
         
     }
 
-    //LateUpdate is called once per frame, after every object has updated.
-    private void LateUpdate()
-    {
-        TurnAround();
-    }
-
     // Handles all the player's movement on the ground.
     private void MoveAround()
     {
@@ -64,24 +53,27 @@ public class ThirdPersonMovement : MonoBehaviour {
         {
             //We are grounded, so apply movement.
             //You get the direction directly from the axis.
-            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));              //Create a vector3 to store the player's movement. It then grabs the horizontal and vertical Input data to control "ground" movement.
-            moveDirection *= speed;                                                                                         //Apply the player's speed to moveDirection.
 
-            if (Input.GetButton("Jump"))                                 //if the "Jump" input is pressed, AND the player is jumping...            
+
+            float h = Input.GetAxis("Horizontal");                      //Stores the Horizontal Input of the keyboard to be referenced within MoveAround.
+            float v = Input.GetAxis("Vertical");                        //Stores the Vertical Input of the keyboard to be referenced within MoveAround.
+
+            if (h != 0 || v != 0)
             {
-                moveDirection.y += jumpSpeed;                               //Add the player's jump speed moveDirection to control air movement.
+                float camYaw = orbitCam.transform.localEulerAngles.y;   //Stores the Yaw of the OrbitalCamera.
+                transform.eulerAngles = new Vector3(0, camYaw, 0);      //Adjusts the rotation of this object using Euler Angles.
+            }
+
+            moveDirection = transform.TransformDirection(new Vector3(-h, 0.0f, -v)) * speed;         //Get the direction the player is going to move based on the direction it's facing, the "Horizontal" and "Vertical" Inputs, and it's speed.
+
+            if (Input.GetButton("Jump"))                                                            //if the "Jump" input is pressed, AND the player is jumping...            
+            {
+                moveDirection.y += jumpSpeed;                                                           //Add the player's jump speed moveDirection to control air movement.
             }
         }
 
         moveDirection.y -= gravity * Time.deltaTime;                //Apply gravity.
-
         pawn.Move(moveDirection * Time.deltaTime);                  //Move the controller.
-    }
-
-    // [TODO:] possible means of aiming player?
-    private void TurnAround()
-    {
-        //pawn.transform.localEulerAngles = new Vector3(cam.transform.localPosition.y, cam.transform.localPosition.x, 0.0f);
     }
 
     //Is called upon when the player needs to shoot.
