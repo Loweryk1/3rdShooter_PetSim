@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(OrientPlayer))]
+
 /// <summary>
 /// This script controls shooting mechanics for the player.
 /// </summary>
 public class ShootBullet : MonoBehaviour {
-
+    /// <summary>
+    /// Controls the maximum amount of time between bullet fire.
+    /// </summary>
     public float bulletSpawnTimerMax = 2.0f;
 
     /// <summary>
@@ -36,7 +40,9 @@ public class ShootBullet : MonoBehaviour {
         print("Cooldown time for bullets: " + coolDown);
 	}
 
-    //Fire prepares and shoots bullets.
+    /// <summary>
+    /// Fire prepares and shoots bullets at a constant forward velocity from the bulletSpawn position.
+    /// </summary>
     void Fire()
     {
         if (coolDown <= 0)

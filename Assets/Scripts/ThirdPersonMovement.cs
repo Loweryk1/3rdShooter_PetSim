@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]                             //To run this code, the object needs to have a CharacterController attached.
+[RequireComponent(typeof(OrientPlayer))]                                    ///To run this code, the object needs to have a OrientPlayer 
 
 /// <summary>
 /// This script gives the the object its applied to the ability to be controlled by the player.
@@ -44,7 +45,9 @@ public class ThirdPersonMovement : MonoBehaviour {
         
     }
 
-    // Handles all the player's movement on the ground.
+    /// <summary>
+    /// Handles all the player's movement when they're touching the ground.
+    /// </summary>
     private void MoveAround()
     {
         if (pawn.isGrounded)
