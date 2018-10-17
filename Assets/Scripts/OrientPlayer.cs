@@ -12,12 +12,10 @@ public class OrientPlayer : MonoBehaviour {
     /// </summary>
     public Transform orbitCam;
 
-    void Start() { }
-
     /// <summary>
-    /// Is called to rotate the player to the direction an OrbitalCamera is facing using the player's euler angles.
+    /// Update is called upon once every frame to update the object.
     /// </summary>
-    public void TurnAround()
+    public void Update()
     {
         float camYaw = orbitCam.eulerAngles.y;   //Stores the Yaw of the OrbitalCamera.
         transform.eulerAngles = new Vector3(0, camYaw, 0);      //Adjusts the rotation of this object using Euler Angles.

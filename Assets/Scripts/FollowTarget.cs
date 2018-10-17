@@ -6,16 +6,18 @@ using UnityEngine;
 /// Allows the object this script is applied to to follow the transform component of another object specified.
 /// </summary>
 public class FollowTarget : MonoBehaviour {
-
-    public Transform target;                    //The target we want to follow.
-    public float easeMultiplier = 10;           //The amount of easing we want when adjusting to follow the target.
-
-	// Use this for initialization
-	void Start () {
-		
-	}
+    /// <summary>
+    /// The target of the camera we wish to follow.
+    /// </summary>
+    public Transform target;
+    /// <summary>
+    /// The amount of easing we want when adjusting the camera to follow the target.
+    /// </summary>
+    public float easeMultiplier = 10;
 	
-	// Update is called once per frame
+	/// <summary>
+    /// Update is called upon once every frame to update the object.
+    /// </summary>
 	void Update () {
 		if(target)
         {

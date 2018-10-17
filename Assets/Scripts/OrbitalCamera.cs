@@ -42,11 +42,10 @@ public class OrbitalCamera : MonoBehaviour {
     /// The "Vertical" sensitivity of the Camera's controls.
     /// </summary>
     public float lookSensitivityY = 1.0f;
-
-    // Use this for initialization
-    void Start () { }
 	
-	// Update is called once per frame
+	/// <summary>
+    /// Update is called upon once every frame to update the object.
+    /// </summary>
 	void Update () {
         lookAround();                                                                           //Call upon the lookAround() function.
     }

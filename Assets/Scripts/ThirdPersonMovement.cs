@@ -33,12 +33,16 @@ public class ThirdPersonMovement : MonoBehaviour {
     /// </summary>
     private Vector3 moveDirection = Vector3.zero;
 
-    // Use this for initialization
+    /// <summary>
+    /// Start is called upon when the object is instantiated.
+    /// </summary>
     void Start () {
         pawn = GetComponent<CharacterController>();                                 //Stores the CharacterController of the object this script is applied to as "pawn".
     }
 	
-	// Update is called once per frame
+	/// <summary>
+    /// Update is called upon once every frame to update the object.
+    /// </summary>
 	void Update ()
     {
         MoveAround();                                                               //Calls upon the MoveAround() function. 
@@ -59,7 +63,7 @@ public class ThirdPersonMovement : MonoBehaviour {
             float h = Input.GetAxis("Horizontal");                      //Stores the Horizontal Input of the keyboard to be referenced within MoveAround.
             float v = Input.GetAxis("Vertical");                        //Stores the Vertical Input of the keyboard to be referenced within MoveAround.
 
-            if (h != 0 || v != 0) GetComponent<OrientPlayer>().TurnAround();
+            //if (h != 0 || v != 0) GetComponent<OrientPlayer>().TurnAround();
 
             moveDirection = transform.TransformDirection(new Vector3(h, 0.0f, v)) * speed;         //Get the direction the player is going to move based on the direction it's facing, the "Horizontal" and "Vertical" Inputs, and it's speed.
 

@@ -2,83 +2,108 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(OrientPlayer))]
-
 /// <summary>
 /// This script controls shooting mechanics for the player.
 /// </summary>
 public class ShootBullet : MonoBehaviour {
-    /// <summary>
-    /// Controls the maximum amount of time between bullet fire.
-    /// </summary>
-    public float bulletSpawnTimerMax = 0.1f;
 
     /// <summary>
-    /// Stores the prefab of the bullet that is fired.
+    /// Stores the amount of damage this gun does to objects.
     /// </summary>
-    public GameObject bulletPrefab;
-    /// <summary>
-    /// Stores the spawn location of the bullets.
-    /// </summary>
-    public Transform bulletSpawn;
-
+    public int gunDamage = 1;
     /// <summary>
     /// Stores the current time until the next bullet can be fired.
     /// </summary>
-    public float coolDown = 0;
-
-    public float bulletDistance = 100.0f;
-
-	// Use this for initialization
-	void Start () { }
-	
-	// Update is called once per frame
-	void Update () {
-        if (Input.GetButton("Fire1"))                           //If the 'Fire1' input is pressed...
-        {
-            Fire();                                                 //Call the Fire() function
-        }
-        coolDown-= Time.deltaTime;                            //If the coolDown timer greater than 0, it counts down deltaTime.
-	}
+    public float fireRate = .25f;
+    /// <summary>
+    /// Controls the max distance a raycast bullet is able to travel.
+    /// </summary>
+    public float weaponRange = 50.0f;
+    /// <summary>
+    /// Stores how hard the gun hits for blowback purposes.
+    /// </summary>
+    public float hitForce = 100f;
+    /// <summary>
+    /// Stores the location of the end of the gun.
+    /// </summary>
+    public Transform gunEnd;
 
     /// <summary>
-    /// Fire prepares and shoots bullets at a constant forward velocity from the bulletSpawn position.
+    /// References the Camera we are drawing the aim raycast from.
     /// </summary>
-    void Fire()
-    {
-        if (coolDown <= 0)
-        {
-            //Adjust the player so it is facing the same direction as the Orbital Camera.
-            OrientPlayer orient = GetComponent<OrientPlayer>();
-            orient.TurnAround();
+    public Camera tpsCam;
+    /// <summary>
+    /// Stores how long the shot lasts in the game.
+    /// </summary>
+    private WaitForSeconds shotDuration = new WaitForSeconds(.07f);
+    /// <summary>
+    /// Stores the audio for the gunshot heard when the weapon is fired.
+    /// </summary>
+    private AudioSource gunAudio;
+    /// <summary>
+    /// This draws a straight line between two or more points in a straight line between them in the game view.
+    /// </summary>
+    private LineRenderer laserLine;
+    /// <summary>
+    /// Stores the time at which the player will be allowed to fire again after firing.
+    /// </summary>
+    private float nextFire;
 
-            Ray ray = new Ray(orient.orbitCam.position, orient.orbitCam.forward);
-            if (Physics.Raycast(ray, bulletDistance))
+	/// <summary>
+    /// Use this function when instantiating a new object with this script attached.
+    /// </summary>
+	void Start () {
+        laserLine = GetComponent<LineRenderer>();
+        gunAudio = GetComponent<AudioSource>();
+    }
+
+	/// <summary>
+    /// Update is called once every frame to update the object.
+    /// </summary>
+	void Update () {
+        if (Input.GetButtonDown("Fire1") && Time.time > nextFire)
+        {
+
+            nextFire = Time.time + fireRate;
+            StartCoroutine(ShotEffect());
+            Vector3 rayOrigin = tpsCam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
+
+            RaycastHit hit;
+
+            laserLine.SetPosition(0, gunEnd.position);
+
+            if(Physics.Raycast(rayOrigin, tpsCam.transform.forward, out hit, weaponRange))
             {
-                Debug.DrawRay(ray.origin, ray.direction * bulletDistance, Color.green, 5.0f);
-                Debug.Log("Did Hit");
+                laserLine.SetPosition(1, hit.point);
             }
             else
             {
-                Debug.DrawRay(ray.origin, ray.direction * bulletDistance, Color.white, 5.0f);
-                Debug.Log("Did Not Hit");
+                laserLine.SetPosition(1, tpsCam.transform.forward * weaponRange);
             }
-            
 
-            //Create the Bullet from the Bullet Prefab
-            var bullet = (GameObject)Instantiate(
-                bulletPrefab,
-                bulletSpawn.position,
-                bulletSpawn.rotation);
-
-            //Add velocity to the bullet
-            //bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 6;
-
-
-
-            //Detroy the bullet after 2 seconds
-            Destroy(bullet, 2.0f);
-            coolDown = bulletSpawnTimerMax;
+            ShootableTarget health = hit.collider.GetComponent<ShootableTarget>();
+            if(health != null)
+            {
+                health.Damage(gunDamage);
+            }
+            if(hit.rigidbody != null)
+            {
+                hit.rigidbody.AddForce(-hit.normal * hitForce);
+            }
         }
+	}
+
+    /// <summary>
+    /// Is called upon alongside update to control any effects created by firing the gun.
+    /// </summary>
+    /// <returns>The amount of time this function remains active.</returns>
+    private IEnumerator ShotEffect()
+    {
+        gunAudio.Play();
+        laserLine.enabled = true;
+
+        yield return shotDuration;
+
+        laserLine.enabled = false;
     }
 }
