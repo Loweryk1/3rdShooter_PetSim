@@ -50,6 +50,9 @@ public class OrbitalCamera : MonoBehaviour {
         lookAround();                                                                           //Call upon the lookAround() function.
     }
 
+    /// <summary>
+    /// This controls the Orbital Camera's ability to look around as it orbits its target.
+    /// </summary>
     private void lookAround()
     {
         float lookX = Input.GetAxis("Mouse X") * (invertLookX ? -1 : 1) * lookSensitivityX;     //Store the horizontal change of the camera.
